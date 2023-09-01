@@ -8,6 +8,7 @@ import {
     Link,
     Redirect,
 } from "react-router-dom";
+import Room from "./Room";
 
 export default class HomePage extends Component {
     constructor(props) {
@@ -25,6 +26,7 @@ export default class HomePage extends Component {
                     />
                     <Route exact path="/join" element={<JoinRoomPage />} />
                     <Route exact path="/create" element={<CreateRoomPage />} />
+                    <Route exact path="/room/:roomCode" element={<Room />} />
                 </Routes>
             </Router>
         );
