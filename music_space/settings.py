@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "music_space_api.apps.MusicSpaceApiConfig",
     "rest_framework",
     "music_space_frontend.apps.MusicSpaceFrontendConfig",
+    "spotify.apps.SpotifyConfig",
 ]
 
 MIDDLEWARE = [
