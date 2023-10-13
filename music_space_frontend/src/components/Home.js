@@ -10,6 +10,7 @@ import {
     Navigate,
 } from "react-router-dom";
 import Room from "./Room";
+import AppInfo from "./AppInfo";
 
 export default class HomePage extends Component {
     constructor(props) {
@@ -58,6 +59,10 @@ export default class HomePage extends Component {
                             <Button color="primary" to="/join" component={Link}>
                                 Join a Room
                             </Button>
+
+                            <Button color="default" to="/info" component={Link}>
+                                Info
+                            </Button>
                             <Button
                                 color="secondary"
                                 to="/create"
@@ -84,6 +89,7 @@ export default class HomePage extends Component {
                 <Routes>
                     <Route exact path="/" element={this.renderHomePage()} />
                     <Route exact path="/join" element={<JoinRoomPage />} />
+                    <Route exact path="/info" element={<AppInfo />} />
                     <Route exact path="/create" element={<CreateRoomPage />} />
                     <Route
                         exact
