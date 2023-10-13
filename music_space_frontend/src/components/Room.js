@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Grid, Button, Typography } from "@material-ui/core";
 import CreateRoomPage from "./CreateRoomPage";
+import MusicPlayer from "./MusicPlayer";
 
 export default function Room(props) {
     const { roomCode } = useParams();
@@ -11,6 +12,7 @@ export default function Room(props) {
     const [isHost, setIsHost] = useState(false);
     const [showSettings, setshowSettings] = useState(false);
     const [spotifyAuthenticated, setspotifyAuthenticated] = useState(false);
+    const [song, setSong] = useState({});
 
     const getRoomDetails = () => {
         fetch(`/api/get-room?code=${roomCode}`)
@@ -35,6 +37,14 @@ export default function Room(props) {
     useEffect(() => {
         // Fetch room details using the roomCode
         getRoomDetails();
+        getCurrentSong();
+        // This code is equivalent to componentDidMount
+        const intervalId = setInterval(getCurrentSong, 1000);
+
+        // This is equivalent to componentWillUnmount
+        return () => {
+            clearInterval(intervalId);
+        };
     }, [roomCode]);
 
     const leaveButtonPressed = () => {
@@ -75,10 +85,23 @@ export default function Room(props) {
                     fetch("/spotify/get-auth-url")
                         .then((response) => response.json())
                         .then((data) => {
-                            console.log(data.url);
                             window.location.replace(data.url);
                         });
                 }
+            });
+    };
+
+    const getCurrentSong = () => {
+        fetch("/spotify/current-song")
+            .then((response) => {
+                if (!response.ok) {
+                    return {};
+                } else {
+                    return response.json();
+                }
+            })
+            .then((data) => {
+                setSong(data);
             });
     };
 
@@ -117,21 +140,8 @@ export default function Room(props) {
                     Code: {roomCode}
                 </Typography>
             </Grid>
-            <Grid item xs={12} align="center">
-                <Typography variant="h6" component="h6">
-                    Votes: {votesToSkip}
-                </Typography>
-            </Grid>
-            <Grid item xs={12} align="center">
-                <Typography variant="h6" component="h6">
-                    Guest Can Pause: {guestCanPause.toString()}
-                </Typography>
-            </Grid>
-            <Grid item xs={12} align="center">
-                <Typography variant="h6" component="h6">
-                    Host: {isHost.toString()}
-                </Typography>
-            </Grid>
+
+            <MusicPlayer {...song} />
 
             {isHost ? renderSettingsButton() : null}
 

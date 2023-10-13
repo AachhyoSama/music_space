@@ -85,4 +85,38 @@ class CurrentSong(APIView):
 
         print(response)
 
-        return Response({}, status=status.HTTP_200_OK)
+        # Lets parse the response
+        if "error" in response or "item" not in response:
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        item = response.get("item")
+        duration = item.get("duration_ms")
+        progress = response.get("progress_ms")
+        album_cover = (
+            item.get("album").get("images")[0].get("url")
+        )  # get the first image url of album cover
+        is_playing = response.get("is_playing")
+        song_id = item.get("id")
+
+        # some songs have multiple artists
+        artist_string = ""
+
+        for i, artist in enumerate(item.get("artists")):
+            if i > 0:
+                artist_string += ", "
+            name = artist.get("name")
+            artist_string += name
+
+        # custom object managed for frontend
+        song = {
+            "title": item.get("name"),
+            "artist": artist_string,
+            "duration": duration,
+            "time": progress,
+            "image_url": album_cover,
+            "is_playing": is_playing,
+            "votes": 0,
+            "id": song_id,
+        }
+
+        return Response(song, status=status.HTTP_200_OK)
