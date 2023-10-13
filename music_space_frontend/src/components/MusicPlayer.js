@@ -15,6 +15,33 @@ export default class MusicPlayer extends Component {
         super(props);
     }
 
+    pauseSong() {
+        const requestOptions = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+        };
+
+        fetch("/spotify/pause", requestOptions);
+    }
+
+    playSong() {
+        const requestOptions = {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+        };
+
+        fetch("/spotify/play", requestOptions);
+    }
+
+    skipSong() {
+        const requestOptions = {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        };
+
+        fetch("/spotify/skip", requestOptions);
+    }
+
     render() {
         const songProgress = (this.props.time / this.props.duration) * 100;
 
@@ -38,7 +65,13 @@ export default class MusicPlayer extends Component {
                         </Typography>
 
                         <div>
-                            <IconButton>
+                            <IconButton
+                                onClick={() => {
+                                    this.props.is_playing
+                                        ? this.pauseSong()
+                                        : this.playSong();
+                                }}
+                            >
                                 {this.props.is_playing ? (
                                     <PauseIcon />
                                 ) : (
@@ -46,8 +79,9 @@ export default class MusicPlayer extends Component {
                                 )}
                             </IconButton>
 
-                            <IconButton>
-                                <SkipNextIcon />
+                            <IconButton onClick={() => this.skipSong()}>
+                                <SkipNextIcon /> {this.props.votes} /{" "}
+                                {this.props.votes_required} Votes
                             </IconButton>
                         </div>
                     </Grid>
