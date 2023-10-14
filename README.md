@@ -42,6 +42,6 @@ npm run dev
 
 ### Project Running
 Now go to the browser and go to this link:
-https://127.0.0.1:8000
+http://127.0.0.1:8000
 
 You can check the code in the source code. Enjoy!!
