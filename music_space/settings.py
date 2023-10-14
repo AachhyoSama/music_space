@@ -82,6 +82,13 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
     }
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql",
+    #     "NAME": "music_space",
+    #     "USER": "postgres",
+    #     "PASSWORD": "soulti",
+    #     "PORT": "5432",
+    # }
 }
 
 
