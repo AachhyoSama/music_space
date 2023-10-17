@@ -63,6 +63,7 @@ export default class HomePage extends Component {
                             <Button color="default" to="/info" component={Link}>
                                 Info
                             </Button>
+
                             <Button
                                 color="secondary"
                                 to="/create"
