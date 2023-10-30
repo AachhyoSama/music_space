@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import JoinRoomPage from "./JoinRoomPage";
 import CreateRoomPage from "./CreateRoomPage";
 import { Grid, Button, ButtonGroup, Typography } from "@material-ui/core";
@@ -12,32 +12,24 @@ import {
 import Room from "./Room";
 import AppInfo from "./AppInfo";
 
-export default class HomePage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            roomCode: null,
-        };
+function HomePage() {
+    const [roomCode, setRoomCode] = useState(null);
 
-        this.clearRoomCode = this.clearRoomCode.bind(this);
-    }
-
-    // componentDidMount means the component just rendered for the first time in the screen
-    async componentDidMount() {
+    useEffect(() => {
         fetch("/api/user-in-room")
             .then((response) => response.json())
             .then((data) => {
-                this.setState({
-                    roomCode: data.code,
-                });
+                setRoomCode(data.code);
             });
-    }
+    }, []);
 
-    renderHomePage() {
-        if (this.state.roomCode) {
-            return (
-                <Navigate to={`/room/${this.state.roomCode}`} replace={true} />
-            );
+    const clearRoomCode = () => {
+        setRoomCode(null);
+    };
+
+    const renderHomePage = () => {
+        if (roomCode) {
+            return <Navigate to={`/room/${roomCode}`} replace={true} />;
         } else {
             return (
                 <Grid container spacing={3}>
@@ -76,31 +68,23 @@ export default class HomePage extends Component {
                 </Grid>
             );
         }
-    }
+    };
 
-    clearRoomCode() {
-        this.setState({
-            roomCode: null,
-        });
-    }
-
-    render() {
-        return (
-            <Router>
-                <Routes>
-                    <Route exact path="/" element={this.renderHomePage()} />
-                    <Route exact path="/join" element={<JoinRoomPage />} />
-                    <Route exact path="/info" element={<AppInfo />} />
-                    <Route exact path="/create" element={<CreateRoomPage />} />
-                    <Route
-                        exact
-                        path="/room/:roomCode"
-                        element={
-                            <Room leaveRoomCallback={this.clearRoomCode} />
-                        }
-                    />
-                </Routes>
-            </Router>
-        );
-    }
+    return (
+        <Router>
+            <Routes>
+                <Route exact path="/" element={renderHomePage()} />
+                <Route exact path="/join" element={<JoinRoomPage />} />
+                <Route exact path="/info" element={<AppInfo />} />
+                <Route exact path="/create" element={<CreateRoomPage />} />
+                <Route
+                    exact
+                    path="/room/:roomCode"
+                    element={<Room leaveRoomCallback={clearRoomCode} />}
+                />
+            </Routes>
+        </Router>
+    );
 }
+
+export default HomePage;
