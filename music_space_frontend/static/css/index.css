@@ -2,6 +2,8 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    background-image: linear-gradient(rgb(61, 61, 197), rgb(14, 86, 14));
+    color: white;
 }
 
 #main {
